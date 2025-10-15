@@ -1,10 +1,7 @@
-package com.example.perfulandia
+package com.example.perfulandia.ui.auth
 
-import ads_mobile_sdk.h5
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -15,35 +12,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RegistrationScreen() {
-    // Estas variables guardarán el estado de lo que el usuario escribe.
-    var fullName by remember { mutableStateOf("") }
+fun LoginScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Column organiza los elementos verticalmente.
     Column(
         modifier = Modifier
-            .fillMaxSize() // Ocupa toda la pantalla
-            .padding(16.dp), // Añade un margen
-        verticalArrangement = Arrangement.Center, // Centra verticalmente
-        horizontalAlignment = Alignment.CenterHorizontally // Centra horizontalmente
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Crea tu cuenta"
+            text = "Iniciar sesion"
         )
 
-        Spacer(modifier = Modifier.height(24.dp)) // Un espacio vertical
-
-        // Campo de texto para el nombre
-        OutlinedTextField(
-            value = fullName,
-            onValueChange = { fullName = it },
-            label = { Text("Nombre completo") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Campo de texto para el email
         OutlinedTextField(
@@ -66,15 +50,23 @@ fun RegistrationScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón de registro
+        // Botón de Iniciar sesion
         Button(
             onClick = {
                 // AQUÍ irá la lógica para registrar al usuario más adelante
-                println("Datos: Nombre: $fullName, Email: $email")
+                println("Datos: : Email: $email")
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Registrarse")
+            Text("Iniciar sesion")
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    com.example.perfulandia.ui.theme.PerfulandiaTheme {
+        LoginScreen()
     }
 }
