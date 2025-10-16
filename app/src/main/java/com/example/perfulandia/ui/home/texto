@@ -1,0 +1,15 @@
+// Con @OptIn estamos declarando que vamos a ocupar la libreria Material 3
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen() {
+    val productList = listOf(
+        Product(1, "Tommy Hilfinger Impact", 35000.0, 20),
+        Product(2, "Versace Eros Flame", 55000.0, 10),
+        Product(3, "Sauvage Elixir", 110000.0, 30)
+    )
+    Scaffold (
+        topBar = { PerfulandiaTopBar() }
+    ) {
+
+    }
+}

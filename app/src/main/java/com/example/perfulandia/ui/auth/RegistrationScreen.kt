@@ -77,7 +77,5 @@ fun RegistrationScreen() {
 @Preview(showBackground = true)
 @Composable
 fun RegistrationScreenPreview() {
-    com.example.perfulandia.ui.theme.PerfulandiaTheme {
-        RegistrationScreen()
-    }
+    RegistrationScreen()
 }
