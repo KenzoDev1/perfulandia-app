@@ -1,10 +1,7 @@
-package com.example.perfulandia
+package com.example.perfulandia.ui.auth
 
-import ads_mobile_sdk.h5
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,24 +13,22 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RegistrationScreen() {
-    // Estas variables guardarán el estado de lo que el usuario escribe.
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Column organiza los elementos verticalmente.
     Column(
         modifier = Modifier
-            .fillMaxSize() // Ocupa toda la pantalla
-            .padding(16.dp), // Añade un margen
-        verticalArrangement = Arrangement.Center, // Centra verticalmente
-        horizontalAlignment = Alignment.CenterHorizontally // Centra horizontalmente
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Crea tu cuenta"
         )
 
-        Spacer(modifier = Modifier.height(24.dp)) // Un espacio vertical
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Campo de texto para el nombre
         OutlinedTextField(
@@ -77,4 +72,10 @@ fun RegistrationScreen() {
             Text("Registrarse")
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegistrationScreenPreview() {
+    RegistrationScreen()
 }
