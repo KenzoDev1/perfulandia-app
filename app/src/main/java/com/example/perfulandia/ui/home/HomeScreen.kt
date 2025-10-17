@@ -1,6 +1,5 @@
 package com.example.perfulandia.ui.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.perfulandia.data.Product
+import kotlin.math.ceil
 
 // Con @OptIn estamos declarando que vamos a ocupar la libreria Material 3
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,9 +79,11 @@ fun HomeScreen() {
 
             // 3. Grilla de productos
             item {
-                // Usamos LazyVerticalGrid dentro de un item de LazyColumn
-                // Nota: se le da un alto fijo para que funcione correctamente anidado.
-                val gridHeight = (productList.size / 2) * 220 // Ajusta 220.dp al alto de tu Card
+                // Se calcula el número de filas necesarias, redondeando hacia arriba.
+                val rowCount = ceil(productList.size / 2.0).toInt()
+
+                val gridHeight = rowCount * 220
+
                 LazyVerticalGrid (
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
@@ -96,10 +98,7 @@ fun HomeScreen() {
                     }
                 }
             }
-            // 4. Footer (si es parte del scroll)
-            item {
-                // Aquí podrías agregar el footer si quieres que se deslice con el resto
-            }
+
         }
     }
 }
@@ -121,7 +120,7 @@ fun PerfulandiaTopBar() {
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Buscar") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .height(48.dp)
                     .clip(RoundedCornerShape(50)),
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
@@ -145,6 +144,30 @@ fun PerfulandiaTopBar() {
 }
 
 @Composable
+fun FeaturedProductBanner() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+            // sp es una unidad de medida muy similar a dp, pero es exclusivamente para definir el
+            // tamaño del texto, esto es porque en distintos dispositivos esto esta configurado
+            // de distintos tamaños
+            Text("Nombre producto", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            Button (onClick = { /*TODO*/ }) {
+                Text("Precio")
+            }
+        }
+    }
+}
+
+@Composable
 fun ProductCard(product: Product) {
     Card (
         modifier = Modifier.fillMaxWidth(),
@@ -162,34 +185,12 @@ fun ProductCard(product: Product) {
                     .border(1.dp, Color.Gray),
                 contentAlignment = Alignment.Center
             ) {
-                // Aquí iría tu imagen, por ejemplo con la librería Coil:
                 // AsyncImage(model = product.imageUrl, contentDescription = product.name)
                 Text("Imagen", color = Color.Gray)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(product.name, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
             Text(product.price.toString(), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        }
-    }
-}
-
-@Composable
-fun FeaturedProductBanner() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Nombre producto", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            Button (onClick = { /*TODO*/ }) {
-                Text("Precio")
-            }
         }
     }
 }
@@ -202,12 +203,18 @@ fun HomeScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
+fun PerfulandiaTopBarPreview() {
+    PerfulandiaTopBar()
+}
+
+@Preview(showBackground = true)
+@Composable
 fun FeaturedProductBannerPreview(){
     FeaturedProductBanner()
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PerfulandiaTopBarPreview() {
-    PerfulandiaTopBar()
+fun ProductCardPreview() {
+    ProductCard(product = Product(1, "Tommy Hilfinger Impact", 35000.0, 20))
 }
