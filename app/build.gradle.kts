@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose) // Dependencia agregadada para usar Navegation Compose
     implementation("androidx.compose.material:material-icons-extended") // Dependencia agregada para usar mas iconos
     implementation(libs.ads.mobile.sdk)
     testImplementation(libs.junit)

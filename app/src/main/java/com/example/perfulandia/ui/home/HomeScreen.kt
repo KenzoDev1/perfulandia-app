@@ -20,16 +20,21 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,72 +44,119 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.perfulandia.data.Product
+import com.example.perfulandia.ui.navigation.AppRoutes
+import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
 // Con @OptIn estamos declarando que vamos a ocupar la libreria Material 3
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
+    // 1. Estados para controlar el menú lateral (Drawer)
+    val drawerState = rememberNavController(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
     val productList = listOf(
         Product(1, "Tommy Hilfinger Impact", 35000.0, 20),
         Product(2, "Versace Eros Flame", 55000.0, 10),
         Product(3, "Sauvage Elixir", 110000.0, 30),
     )
-    Scaffold (
-        topBar = { PerfulandiaTopBar() }
-    ) { paddingValues ->
-        // LazyColumn hace que todo el contenido sea deslizable verticalmente
-        LazyColumn (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 1. Banner de producto destacado
-            item {
-                FeaturedProductBanner()
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-
-            // 2. Título de la sección
-            item {
-                Text(
-                    text = "Nuestros productos",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            // 3. El contenido del menú
+            ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(16.dp))
+                NavigationDrawerItem(
+                    label = { Text("Nosotros") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() } // Cierra el menú
+                        navController.navigate(AppRoutes.ABOUT_SCREEN) // Navega
+                    }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Contacto") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(AppRoutes.CONTACT_SCREEN)
+                    }
+                )
             }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                PerfulandiaTopBar(
+                    onSearchClick = {
+                        navController.navigate(AppRoutes.SEARCH_SCREEN)
+                    },
+                    onCartClick = {
+                        navController.navigate(AppRoutes.CART_SCREEN)
+                    }
+                )
+            }
+        ) { paddingValues ->
+            // LazyColumn hace que todo el contenido sea deslizable verticalmente
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // 1. Banner de producto destacado
+                item {
+                    FeaturedProductBanner()
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
 
-            // 3. Grilla de productos
-            item {
-                // Se calcula el número de filas necesarias, redondeando hacia arriba.
-                val rowCount = ceil(productList.size / 2.0).toInt()
+                // 2. Título de la sección
+                item {
+                    Text(
+                        text = "Nuestros productos",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-                val gridHeight = rowCount * 220
+                // 3. Grilla de productos
+                item {
+                    // Se calcula el número de filas necesarias, redondeando hacia arriba.
+                    val rowCount = ceil(productList.size / 2.0).toInt()
 
-                LazyVerticalGrid (
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .height(gridHeight.dp)
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(productList.size) { index ->
-                        val product = productList[index]
-                        ProductCard(product = product)
+                    val gridHeight = rowCount * 220
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .height(gridHeight.dp)
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(productList.size) { index ->
+                            val product = productList[index]
+                            ProductCard(product = product)
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfulandiaTopBar() {
+fun PerfulandiaTopBar(
+    onMenuClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onCartClick: () -> Unit
+) {
     TopAppBar(
         // Centro
         title = {
@@ -130,13 +182,13 @@ fun PerfulandiaTopBar() {
         },
         // Izquierda
         navigationIcon = {
-            IconButton(onClick = { /* Abrir menú lateral */ }) {
+            IconButton(onClick = onMenuClick) {
                 Icon(Icons.Default.Menu, contentDescription = "Menú")
             }
         },
         // Derecha
         actions = {
-            IconButton(onClick = { /* Ir al carrito */ }) {
+            IconButton(onClick = onCartClick) {
                 Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
             }
         }
@@ -198,13 +250,14 @@ fun ProductCard(product: Product) {
 @Preview (showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController = navController)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PerfulandiaTopBarPreview() {
-    PerfulandiaTopBar()
+    PerfulandiaTopBar(onSearchClick = {}, onCartClick = {})
 }
 
 @Preview(showBackground = true)

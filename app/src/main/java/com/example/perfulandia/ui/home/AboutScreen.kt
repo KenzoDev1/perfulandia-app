@@ -16,9 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(navController: NavController) {
     Scaffold(
         topBar = { PerfulandiaTopBar() }
     ) { paddingValues ->

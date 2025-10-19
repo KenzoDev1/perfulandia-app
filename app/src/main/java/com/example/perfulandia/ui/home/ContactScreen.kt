@@ -24,7 +24,7 @@ import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen() {
+fun ContactScreen() {
     // Datos de ejemplo para la vista
     val searchedProduct = Product(1, "Versace Eros Flame", 55000.0, 10)
     val relatedProducts = listOf(
@@ -84,8 +84,8 @@ fun SearchScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun SearchScreenPreview() {
+fun ContactScreenPreview() {
     PerfulandiaTheme {
-        SearchScreen()
+        ContactScreen()
     }
 }

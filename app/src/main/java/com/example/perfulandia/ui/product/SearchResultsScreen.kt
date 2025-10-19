@@ -18,15 +18,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.perfulandia.data.Product
 import com.example.perfulandia.ui.home.PerfulandiaTopBar
 import com.example.perfulandia.ui.home.ProductCard
+import com.example.perfulandia.ui.navigation.AppRoutes
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchResultsScreen() {
+fun SearchResultsScreen(navController: NavController) {
     // Datos de ejemplo para la vista
     val searchedProduct = Product(1, "Versace Eros Flame", 55000.0, 10)
     val relatedProducts = listOf(
@@ -37,7 +40,10 @@ fun SearchResultsScreen() {
     )
 
     Scaffold(
-        topBar = { PerfulandiaTopBar() }
+        topBar = { PerfulandiaTopBar(
+            onSearchClick = { /* Ya estamos en búsqueda, no hacemos nada */ },
+            onCartClick = { navController.navigate(AppRoutes.CART_SCREEN) }
+        ) }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -88,6 +94,7 @@ fun SearchResultsScreen() {
 @Composable
 fun SearchResultsScreenPreview() {
     PerfulandiaTheme {
-        SearchResultsScreen()
+        val navController = rememberNavController()
+        SearchResultsScreen(navController = navController)
     }
 }
