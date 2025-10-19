@@ -22,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.perfulandia.data.Cart
 import com.example.perfulandia.data.CartItem
 import com.example.perfulandia.data.Product
-import com.example.perfulandia.ui.home.PerfulandiaTopBar
 import com.example.perfulandia.ui.navigation.AppRoutes
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
@@ -49,7 +48,7 @@ fun ShoppingCartScreen() {
     if (cartItems.isEmpty()) {
         // Vista para cuando el carrito está vacío.
         Box(
-            modifier = Modifier.fillMaxSize().padding(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -61,7 +60,7 @@ fun ShoppingCartScreen() {
     } else {
         // Vista principal del carrito con productos.
         Column(
-            modifier = Modifier.fillMaxSize().padding()
+            modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
                 modifier = Modifier.weight(1f),

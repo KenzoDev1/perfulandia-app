@@ -35,7 +35,7 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             HomeScreen(navController)
         }
         composable(route = AppRoutes.SEARCH_SCREEN) {
-            SearchResultsScreen()
+            SearchResultsScreen(navController)
         }
         composable(route = AppRoutes.CART_SCREEN) {
             ShoppingCartScreen()

@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.perfulandia.data.Product
-import com.example.perfulandia.ui.home.PerfulandiaTopBar
 import com.example.perfulandia.ui.navigation.AppRoutes
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
@@ -121,4 +120,4 @@ fun ProductDetailScreenPreview() {
         val sampleProduct = Product(1, "Versace Eros Flame", 55000.0, 10)
         ProductDetailScreen(sampleProduct)
     }
-}
+}   
