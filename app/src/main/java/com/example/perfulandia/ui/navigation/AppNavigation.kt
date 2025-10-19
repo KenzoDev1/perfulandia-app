@@ -1,61 +1,58 @@
 package com.example.perfulandia.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.perfulandia.data.Product
 import com.example.perfulandia.ui.cart.ShoppingCartScreen
 import com.example.perfulandia.ui.home.AboutScreen
 import com.example.perfulandia.ui.home.ContactScreen
 import com.example.perfulandia.ui.home.HomeScreen
-import com.example.perfulandia.ui.home.SearchScreen
+import com.example.perfulandia.ui.product.ProductDetailScreen
 import com.example.perfulandia.ui.product.SearchResultsScreen
 
-// 1. Objeto para definir las rutas de forma segura y centralizada.
 object AppRoutes {
     const val HOME_SCREEN = "home"
     const val SEARCH_SCREEN = "search"
     const val CART_SCREEN = "cart"
     const val ABOUT_SCREEN = "about"
     const val CONTACT_SCREEN = "contact"
+    const val PRODUCT_DETAIL_SCREEN = "product_detail"
 }
 
-// 2. Composable principal que contendrá el NavHost (nuestro mapa de navegación).
 @Composable
-fun AppNavigation() {
-    // 3. Creamos el NavController, que es el que gestiona el estado de la navegación.
-    val navController = rememberNavController()
-
-    // 4. Definimos el NavHost, especificando el controlador y la pantalla de inicio.
-    NavHost(navController = navController, startDestination = AppRoutes.HOME_SCREEN) {
-
-        // 5. Definimos cada pantalla (composable) con su ruta asociada.
+fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = AppRoutes.HOME_SCREEN,
+        modifier = modifier // Aplica el padding del Scaffold
+    ) {
         composable(route = AppRoutes.HOME_SCREEN) {
-            // Pasamos el navController a la HomeScreen para que pueda navegar a otras pantallas.
             HomeScreen(navController)
         }
-
         composable(route = AppRoutes.SEARCH_SCREEN) {
-            SearchResultsScreen(navController) // A esta pantalla no le pasamos el navController porque no navega a otros sitios (por ahora).
+            SearchResultsScreen()
         }
-
         composable(route = AppRoutes.CART_SCREEN) {
-            ShoppingCartScreen(navController)
+            ShoppingCartScreen()
         }
-
         composable(route = AppRoutes.ABOUT_SCREEN) {
-            AboutScreen(navController)
+            AboutScreen()
         }
         composable(route = AppRoutes.CONTACT_SCREEN) {
-            ContactScreen(navController)
+            ContactScreen()
         }
-
-        /*
-         Aquí puedes agregar el resto de tus pantallas en el futuro.
-         Por ejemplo:
-         composable(route = "about_screen") {
-             AboutScreen()
-         }
-        */
+        composable(
+            route = "${AppRoutes.PRODUCT_DETAIL_SCREEN}/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+            val sampleProduct = Product(productId, "Producto de Ejemplo", 55000.0, 10)
+            ProductDetailScreen(sampleProduct)
+        }
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.perfulandia.ui.navigation.AppNavigation
+import com.example.perfulandia.ui.MainScaffold // <-- IMPORTA EL NUEVO ARCHIVO
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +13,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PerfulandiaTheme {
-                // Aquí llamamos a nuestro sistema de navegación en lugar del Scaffold anterior.
-                AppNavigation()
+                // Aquí llamamos a nuestro nuevo contenedor principal
+                MainScaffold()
             }
         }
     }

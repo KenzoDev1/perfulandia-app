@@ -1,83 +1,83 @@
 package com.example.perfulandia.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.perfulandia.data.Product
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.perfulandia.ui.navigation.AppRoutes
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
-import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactScreen() {
-    // Datos de ejemplo para la vista
-    val searchedProduct = Product(1, "Versace Eros Flame", 55000.0, 10)
-    val relatedProducts = listOf(
-        Product(2, "Tommy Hilfinger Impact", 35000.0, 20),
-        Product(3, "Sauvage Elixir", 110000.0, 30),
-        Product(4, "Otro Perfume A", 45000.0, 15),
-        Product(5, "Otro Perfume B", 62000.0, 5),
-    )
+    // Variables para guardar el estado de los campos del formulario
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var subject by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
 
-    Scaffold(
-        topBar = { PerfulandiaTopBar() }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text("Contacto", style = MaterialTheme.typography.headlineMedium)
+
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Nombre") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = subject,
+            onValueChange = { subject = it },
+            label = { Text("Asunto") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = message,
+            onValueChange = { message = it },
+            label = { Text("Mensaje") },
+            modifier = Modifier.fillMaxWidth().height(120.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = { /* Lógica para enviar el mensaje */ },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            // 1. Producto buscado (se muestra como un card individual)
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                ProductCard(product = searchedProduct)
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-
-            // 2. Título de la sección de relacionados
-            item {
-                Text(
-                    text = "Productos relacionados",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // 3. Grilla de productos relacionados
-            item {
-                // Se calcula la altura necesaria para la grilla para que se muestre completa
-                val rowCount = ceil(relatedProducts.size / 2.0).toInt()
-                val gridHeight = rowCount * 220 // 220.dp es la altura aproximada de cada card
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier.height(gridHeight.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(relatedProducts.size) { index ->
-                        ProductCard(product = relatedProducts[index])
-                    }
-                }
-            }
+            Text("Enviar")
         }
     }
 }
