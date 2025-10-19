@@ -17,15 +17,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.perfulandia.data.Cart
 import com.example.perfulandia.data.CartItem
 import com.example.perfulandia.data.Product
 import com.example.perfulandia.ui.home.PerfulandiaTopBar
+import com.example.perfulandia.ui.navigation.AppRoutes
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingCartScreen() {
+fun ShoppingCartScreen(navController: NavController) {
     // Datos de ejemplo que siguen la estructura de tu API.
     val sampleCart by remember {
         mutableStateOf(
@@ -44,7 +47,10 @@ fun ShoppingCartScreen() {
     var cartItems by remember { mutableStateOf(sampleCart.items) }
 
     Scaffold(
-        topBar = { PerfulandiaTopBar() }
+        topBar = { PerfulandiaTopBar(
+            onSearchClick = { navController.navigate(AppRoutes.SEARCH_SCREEN) },
+            onCartClick = { /* Ya estamos en el carrito, no hacemos nada */ }
+        ) }
     ) { paddingValues ->
         if (cartItems.isEmpty()) {
             // Vista para cuando el carrito está vacío.
@@ -189,7 +195,8 @@ fun OrderSummary(cartItems: List<CartItem>) {
 @Composable
 fun ShoppingCartScreenPreview() {
     PerfulandiaTheme {
-        ShoppingCartScreen()
+        val navController = rememberNavController()
+        ShoppingCartScreen(navController = navController)
     }
 }
 
@@ -197,9 +204,17 @@ fun ShoppingCartScreenPreview() {
 @Composable
 fun EmptyShoppingCartScreenPreview() {
     PerfulandiaTheme {
-        Scaffold(topBar = { PerfulandiaTopBar() }) { padding ->
+        // La llamada a PerfulandiaTopBar aquí dentro necesitaba los parámetros
+        Scaffold(topBar = {
+            PerfulandiaTopBar(
+                onSearchClick = {}, // Le pasamos una acción vacía para el preview
+                onCartClick = {}    // Le pasamos una acción vacía para el preview
+            )
+        }) { padding ->
             Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
