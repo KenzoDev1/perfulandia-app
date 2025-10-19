@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,12 +52,11 @@ import com.example.perfulandia.ui.navigation.AppRoutes
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
-// Con @OptIn estamos declarando que vamos a ocupar la libreria Material 3
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    // 1. Estados para controlar el menú lateral (Drawer)
-    val drawerState = rememberNavController(initialValue = DrawerValue.Closed)
+    // 1. Estados para controlar el menú lateral (Drawer) - CORREGIDO
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val productList = listOf(
@@ -64,18 +64,18 @@ fun HomeScreen(navController: NavController) {
         Product(2, "Versace Eros Flame", 55000.0, 10),
         Product(3, "Sauvage Elixir", 110000.0, 30),
     )
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            // 3. El contenido del menú
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(16.dp))
                 NavigationDrawerItem(
                     label = { Text("Nosotros") },
                     selected = false,
                     onClick = {
-                        scope.launch { drawerState.close() } // Cierra el menú
-                        navController.navigate(AppRoutes.ABOUT_SCREEN) // Navega
+                        scope.launch { drawerState.close() }
+                        navController.navigate(AppRoutes.ABOUT_SCREEN)
                     }
                 )
                 NavigationDrawerItem(
@@ -92,6 +92,11 @@ fun HomeScreen(navController: NavController) {
         Scaffold(
             topBar = {
                 PerfulandiaTopBar(
+                    onMenuClick = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    },
                     onSearchClick = {
                         navController.navigate(AppRoutes.SEARCH_SCREEN)
                     },
@@ -101,20 +106,16 @@ fun HomeScreen(navController: NavController) {
                 )
             }
         ) { paddingValues ->
-            // LazyColumn hace que todo el contenido sea deslizable verticalmente
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // 1. Banner de producto destacado
                 item {
                     FeaturedProductBanner()
                     Spacer(modifier = Modifier.height(24.dp))
                 }
-
-                // 2. Título de la sección
                 item {
                     Text(
                         text = "Nuestros productos",
@@ -123,14 +124,9 @@ fun HomeScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-
-                // 3. Grilla de productos
                 item {
-                    // Se calcula el número de filas necesarias, redondeando hacia arriba.
                     val rowCount = ceil(productList.size / 2.0).toInt()
-
                     val gridHeight = rowCount * 220
-
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
                         modifier = Modifier
@@ -145,11 +141,11 @@ fun HomeScreen(navController: NavController) {
                         }
                     }
                 }
-
             }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfulandiaTopBar(
@@ -158,18 +154,15 @@ fun PerfulandiaTopBar(
     onCartClick: () -> Unit
 ) {
     TopAppBar(
-        // Centro
         title = {
-            // Falta un mutableStateOf(""), se agregara mas adelante
             TextField(
                 value = "",
                 onValueChange = {},
                 placeholder = { Text("Buscar en perfulandia") },
-                /* ContentDescription proporciona una descripcion textual para personas
-                con discapacidad visual, que ocupan lectores de pantallas como
-                TalkBack, describiria con la palabra "
-                Buscar" al presionar este icono */
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Buscar") },
+                leadingIcon = {
+                    // El ícono de búsqueda aquí es solo visual, la acción la hace el de la derecha
+                    Icon(Icons.Default.Search, contentDescription = "Icono de búsqueda")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
@@ -180,14 +173,16 @@ fun PerfulandiaTopBar(
                 )
             )
         },
-        // Izquierda
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(Icons.Default.Menu, contentDescription = "Menú")
             }
         },
-        // Derecha
         actions = {
+            // Se movió el botón de búsqueda a 'actions' para que sea más intuitivo
+            IconButton(onClick = onSearchClick) {
+                Icon(Icons.Default.Search, contentDescription = "Buscar")
+            }
             IconButton(onClick = onCartClick) {
                 Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
             }
@@ -206,13 +201,10 @@ fun FeaturedProductBanner() {
             .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
-            // sp es una unidad de medida muy similar a dp, pero es exclusivamente para definir el
-            // tamaño del texto, esto es porque en distintos dispositivos esto esta configurado
-            // de distintos tamaños
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Nombre producto", fontSize = 22.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            Button (onClick = { /*TODO*/ }) {
+            Button(onClick = { /*TODO*/ }) {
                 Text("Precio")
             }
         }
@@ -221,7 +213,7 @@ fun FeaturedProductBanner() {
 
 @Composable
 fun ProductCard(product: Product) {
-    Card (
+    Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
@@ -229,7 +221,6 @@ fun ProductCard(product: Product) {
             modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Placeholder para la imagen del producto
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -237,7 +228,6 @@ fun ProductCard(product: Product) {
                     .border(1.dp, Color.Gray),
                 contentAlignment = Alignment.Center
             ) {
-                // AsyncImage(model = product.imageUrl, contentDescription = product.name)
                 Text("Imagen", color = Color.Gray)
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -247,7 +237,9 @@ fun ProductCard(product: Product) {
     }
 }
 
-@Preview (showBackground = true)
+// --- PREVIEWS ACTUALIZADOS ---
+
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     val navController = rememberNavController()
@@ -257,17 +249,18 @@ fun HomeScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun PerfulandiaTopBarPreview() {
-    PerfulandiaTopBar(onSearchClick = {}, onCartClick = {})
+    // El preview ahora necesita la nueva acción onMenuClick
+    PerfulandiaTopBar(onMenuClick = {}, onSearchClick = {}, onCartClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun FeaturedProductBannerPreview(){
+fun FeaturedProductBannerPreview() {
     FeaturedProductBanner()
 }
 
 @Preview(showBackground = true)
 @Composable
-fun ProductCardPreview() {
+fun ProductCardPreview(){
     ProductCard(product = Product(1, "Tommy Hilfinger Impact", 35000.0, 20))
 }

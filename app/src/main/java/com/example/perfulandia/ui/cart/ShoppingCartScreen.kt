@@ -28,7 +28,7 @@ import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingCartScreen(navController: NavController) {
+fun ShoppingCartScreen() {
     // Datos de ejemplo que siguen la estructura de tu API.
     val sampleCart by remember {
         mutableStateOf(
@@ -46,60 +46,53 @@ fun ShoppingCartScreen(navController: NavController) {
     // Estado para manejar los cambios en los items del carrito en la UI.
     var cartItems by remember { mutableStateOf(sampleCart.items) }
 
-    Scaffold(
-        topBar = { PerfulandiaTopBar(
-            onSearchClick = { navController.navigate(AppRoutes.SEARCH_SCREEN) },
-            onCartClick = { /* Ya estamos en el carrito, no hacemos nada */ }
-        ) }
-    ) { paddingValues ->
-        if (cartItems.isEmpty()) {
-            // Vista para cuando el carrito está vacío.
-            Box(
-                modifier = Modifier.fillMaxSize().padding(paddingValues),
-                contentAlignment = Alignment.Center
+    if (cartItems.isEmpty()) {
+        // Vista para cuando el carrito está vacío.
+        Box(
+            modifier = Modifier.fillMaxSize().padding(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                "Tu carrito está vacío",
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.Gray
+            )
+        }
+    } else {
+        // Vista principal del carrito con productos.
+        Column(
+            modifier = Modifier.fillMaxSize().padding()
+        ) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(
-                    "Tu carrito está vacío",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.Gray
-                )
-            }
-        } else {
-            // Vista principal del carrito con productos.
-            Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues)
-            ) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    item {
-                        Text(
-                            "Mi Carrito",
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                    items(cartItems, key = { it.id }) { cartItem ->
-                        CartItemCard(
-                            cartItem = cartItem,
-                            onQuantityChange = { newQuantity ->
-                                // Lógica para actualizar la cantidad de un item.
-                                cartItems = cartItems.map {
+                item {
+                    Text(
+                        "Mi Carrito",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                items(cartItems, key = { it.id }) { cartItem ->
+                    CartItemCard(
+                        cartItem = cartItem,
+                        onQuantityChange = { newQuantity ->
+                            // Lógica para actualizar la cantidad de un item.
+                            cartItems = cartItems.map {
                                     if (it.id == cartItem.id) it.copy(stock = newQuantity) else it
                                 }
                             },
-                            onRemoveItem = {
+                        onRemoveItem = {
                                 // Lógica para eliminar un item.
                                 cartItems = cartItems.filter { it.id != cartItem.id }
-                            }
-                        )
-                    }
+                        }
+                    )
                 }
-                OrderSummary(cartItems = cartItems)
             }
+            OrderSummary(cartItems = cartItems)
         }
     }
 }
@@ -195,8 +188,7 @@ fun OrderSummary(cartItems: List<CartItem>) {
 @Composable
 fun ShoppingCartScreenPreview() {
     PerfulandiaTheme {
-        val navController = rememberNavController()
-        ShoppingCartScreen(navController = navController)
+        ShoppingCartScreen()
     }
 }
 
@@ -204,25 +196,17 @@ fun ShoppingCartScreenPreview() {
 @Composable
 fun EmptyShoppingCartScreenPreview() {
     PerfulandiaTheme {
-        // La llamada a PerfulandiaTopBar aquí dentro necesitaba los parámetros
-        Scaffold(topBar = {
-            PerfulandiaTopBar(
-                onSearchClick = {}, // Le pasamos una acción vacía para el preview
-                onCartClick = {}    // Le pasamos una acción vacía para el preview
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                "Tu carrito está vacío",
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.Gray
             )
-        }) { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "Tu carrito está vacío",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.Gray
-                )
-            }
         }
     }
 }

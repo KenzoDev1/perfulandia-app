@@ -29,7 +29,7 @@ import kotlin.math.ceil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchResultsScreen(navController: NavController) {
+fun SearchResultsScreen() {
     // Datos de ejemplo para la vista
     val searchedProduct = Product(1, "Versace Eros Flame", 55000.0, 10)
     val relatedProducts = listOf(
@@ -39,51 +39,43 @@ fun SearchResultsScreen(navController: NavController) {
         Product(5, "Otro Perfume B", 62000.0, 5),
     )
 
-    Scaffold(
-        topBar = { PerfulandiaTopBar(
-            onSearchClick = { /* Ya estamos en búsqueda, no hacemos nada */ },
-            onCartClick = { navController.navigate(AppRoutes.CART_SCREEN) }
-        ) }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 1. Producto buscado (se muestra como un card individual)
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                ProductCard(product = searchedProduct)
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // 1. Producto buscado (se muestra como un card individual)
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            ProductCard(product = searchedProduct)
+            Spacer(modifier = Modifier.height(24.dp))
+        }
 
-            // 2. Título de la sección de relacionados
-            item {
-                Text(
-                    text = "Productos relacionados",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+        // 2. Título de la sección de relacionados
+        item {
+            Text(
+                text = "Productos relacionados",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            // 3. Grilla de productos relacionados
-            item {
-                // Se calcula la altura necesaria para la grilla para que se muestre completa
-                val rowCount = ceil(relatedProducts.size / 2.0).toInt()
-                val gridHeight = rowCount * 220 // 220.dp es la altura aproximada de cada card
+        // 3. Grilla de productos relacionados
+        item {
+            // Se calcula la altura necesaria para la grilla para que se muestre completa
+            val rowCount = ceil(relatedProducts.size / 2.0).toInt()
+            val gridHeight = rowCount * 220 // 220.dp es la altura aproximada de cada card
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier.height(gridHeight.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(relatedProducts.size) { index ->
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.height(gridHeight.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(relatedProducts.size) { index ->
                         ProductCard(product = relatedProducts[index])
-                    }
                 }
             }
         }
@@ -94,7 +86,6 @@ fun SearchResultsScreen(navController: NavController) {
 @Composable
 fun SearchResultsScreenPreview() {
     PerfulandiaTheme {
-        val navController = rememberNavController()
-        SearchResultsScreen(navController = navController)
+        SearchResultsScreen()
     }
 }
