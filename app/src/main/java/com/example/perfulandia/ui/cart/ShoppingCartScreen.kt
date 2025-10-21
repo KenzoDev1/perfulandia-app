@@ -17,12 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.perfulandia.data.Cart
-import com.example.perfulandia.data.CartItem
-import com.example.perfulandia.data.Product
-import com.example.perfulandia.ui.navigation.AppRoutes
+import com.example.perfulandia.model.Cart
+import com.example.perfulandia.model.CartItem
+import com.example.perfulandia.model.Product
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

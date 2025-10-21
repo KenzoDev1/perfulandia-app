@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.perfulandia.data.Product
+import com.example.perfulandia.model.Product
 import com.example.perfulandia.ui.navigation.AppRoutes
 import kotlin.math.ceil
 
@@ -29,10 +29,9 @@ fun HomeScreen(navController: NavController) {
     val productList = listOf(
         Product(1, "Tommy Hilfinger Impact", 35000.0, 20),
         Product(2, "Versace Eros Flame", 55000.0, 10),
-        Product(3, "Sauvage Elixir", 110000.0, 30),
+        Product(3, "Sauvage Elixir", 110000.0, 30)
     )
 
-    // La pantalla ya NO tiene Scaffold ni TopBar. Solo el contenido.
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -62,9 +61,7 @@ fun HomeScreen(navController: NavController) {
                     .height(gridHeight.dp)
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                // Importante: Deshabilitamos el scroll de la grilla interna
-                // para que el scroll principal de LazyColumn la controle.
+                // Se deshabilita el scroll de la grilla para que LazyColumn lo controle
                 userScrollEnabled = false
             ) {
                 items(productList.size) { index ->
