@@ -1,4 +1,4 @@
-package com.example.perfulandia.data
+package com.example.perfulandia.model
 
 data class Product (
     val id: Int,

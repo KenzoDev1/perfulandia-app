@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.perfulandia.data.Product
+import com.example.perfulandia.model.Product
 import com.example.perfulandia.ui.cart.ShoppingCartScreen
 import com.example.perfulandia.ui.home.AboutScreen
 import com.example.perfulandia.ui.home.ContactScreen
@@ -35,7 +35,7 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             HomeScreen(navController)
         }
         composable(route = AppRoutes.SEARCH_SCREEN) {
-            SearchResultsScreen()
+            SearchResultsScreen(navController)
         }
         composable(route = AppRoutes.CART_SCREEN) {
             ShoppingCartScreen()

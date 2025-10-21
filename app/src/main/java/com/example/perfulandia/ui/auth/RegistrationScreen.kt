@@ -61,10 +61,10 @@ fun RegistrationScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón de registro
+        // Boton de registro
         Button(
             onClick = {
-                // AQUÍ irá la lógica para registrar al usuario más adelante
+                // AQUI ira la logica para registrar al usuario mas adelante
                 println("Datos: Nombre: $fullName, Email: $email")
             },
             modifier = Modifier.fillMaxWidth()

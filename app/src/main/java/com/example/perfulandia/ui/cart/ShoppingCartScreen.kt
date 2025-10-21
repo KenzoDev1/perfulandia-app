@@ -17,13 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.perfulandia.data.Cart
-import com.example.perfulandia.data.CartItem
-import com.example.perfulandia.data.Product
-import com.example.perfulandia.ui.home.PerfulandiaTopBar
-import com.example.perfulandia.ui.navigation.AppRoutes
+import com.example.perfulandia.model.Cart
+import com.example.perfulandia.model.CartItem
+import com.example.perfulandia.model.Product
 import com.example.perfulandia.ui.theme.PerfulandiaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +45,7 @@ fun ShoppingCartScreen() {
     if (cartItems.isEmpty()) {
         // Vista para cuando el carrito está vacío.
         Box(
-            modifier = Modifier.fillMaxSize().padding(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -61,7 +57,7 @@ fun ShoppingCartScreen() {
     } else {
         // Vista principal del carrito con productos.
         Column(
-            modifier = Modifier.fillMaxSize().padding()
+            modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
                 modifier = Modifier.weight(1f),

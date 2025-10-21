@@ -50,10 +50,10 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón de Iniciar sesion
+        // Boton de Iniciar sesion
         Button(
             onClick = {
-                // AQUÍ irá la lógica para registrar al usuario más adelante
+                // AQUI ira la lógica para registrar al usuario mas adelante
                 println("Datos: : Email: $email")
             },
             modifier = Modifier.fillMaxWidth()
