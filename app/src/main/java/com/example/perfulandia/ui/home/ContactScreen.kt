@@ -27,9 +27,11 @@ fun ContactScreen() {
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text("Asunto") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Mensaje") }, modifier = Modifier.fillMaxWidth().height(120.dp))
+        OutlinedTextField(value = message, onValueChange = { message = it }, label = { Text("Mensaje") }, modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp))
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { /* Lógica para enviar el mensaje */ }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = {}, modifier = Modifier.fillMaxWidth()) {
             Text("Enviar")
         }
     }

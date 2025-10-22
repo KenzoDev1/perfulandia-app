@@ -72,7 +72,7 @@ fun ShoppingCartScreen() {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                items(cartItems, key = { it.id }) { cartItem ->
+                items(cartItems, { it.id }) { cartItem ->
                     CartItemCard(
                         cartItem = cartItem,
                         onQuantityChange = { newQuantity ->

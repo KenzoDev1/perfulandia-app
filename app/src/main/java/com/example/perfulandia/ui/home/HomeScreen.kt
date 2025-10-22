@@ -66,7 +66,7 @@ fun HomeScreen(navController: NavController) {
             ) {
                 items(productList.size) { index ->
                     val product = productList[index]
-                    ProductCard(product = product) {
+                    ProductCard(product) {
                         navController.navigate("${AppRoutes.PRODUCT_DETAIL_SCREEN}/${product.id}")
                     }
                 }
@@ -75,7 +75,7 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-// --- Componentes Reutilizables ---
+// Componentes Reutilizables
 
 @Composable
 fun FeaturedProductBanner() {
@@ -91,7 +91,7 @@ fun FeaturedProductBanner() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Nombre producto", fontSize = 22.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = {}) {
                 Text("Precio")
             }
         }
